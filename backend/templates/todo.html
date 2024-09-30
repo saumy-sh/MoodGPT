@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily To-Do List</title>
+    <link rel="stylesheet" href="todo.css">
+
+</head>
+
+
+<body>
+
+    <h1>Daily To-Do List</h1>
+    
+    <div class="todo-container">
+        <ul>
+            <li>
+                <input type="checkbox" id="gratitude" onchange="toggleDone(this)">
+                <label for="gratitude">Gratitude Journaling</label>
+            </li>
+            <li>
+                <input type="checkbox" id="meditation" onchange="toggleDone(this)">
+                <label for="meditation">Meditation or Deep Breathing</label>
+            </li>
+            <li>
+                <input type="checkbox" id="exercise" onchange="toggleDone(this)">
+                <label for="exercise">Physical Exercise</label>
+            </li>
+            <li>
+                <input type="checkbox" id="affirmations" onchange="toggleDone(this)">
+                <label for="affirmations">Positive Affirmations</label>
+            </li>
+            <li>
+                <input type="checkbox" id="mood-check" onchange="toggleDone(this)">
+                <label for="mood-check">Mood Check-In</label>
+            </li>
+            <li>
+                <input type="checkbox" id="detox" onchange="toggleDone(this)">
+                <label for="detox">Digital Detox</label>
+            </li>
+            <li>
+                <input type="checkbox" id="mindful-eating" onchange="toggleDone(this)">
+                <label for="mindful-eating">Mindful Eating</label>
+            </li>
+            <li>
+                <input type="checkbox" id="creative" onchange="toggleDone(this)">
+                <label for="creative">Creative Expression</label>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        // Toggle the done class on the label when checkbox is checked
+        function toggleDone(checkbox) {
+            const label = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                label.classList.add('done');
+            } else {
+                label.classList.remove('done');
+            }
+        }
+    </script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#">Dashboard</a>
+        <a href="#">Activities</a>
+        <a href="#">Badges</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <form action="/logout" method="post">
+        <div class="main-content">
+            <h1>Welcome to Your Dashboard</h1>
+
+            <!-- User info -->
+            <div class="card">
+                <h2>User Info</h2>
+                <p>Username: {{ username }}</p>
+                <p>Last Login: {{ last_login }}</p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="grid-container">
+                <!-- Activities -->
+                <div class="card">
+                    <h2>Completed Daily Activities</h2>
+                    <p>Complete your daily tasks to earn points and badges.</p>
+                    <!-- Example activities placeholder -->
+                    <ul>
+                        activities = {{ activities }}
+                        {% for activity in activities%}
+                            <li><strong>activity</strong></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Badges -->
+                <div class="card">
+                    <h2>Your Badges</h2>
+                    <p>Earn badges by completing tasks and activities.</p>
+                    <ul>
+                        badges = {{ badges }}
+                        {% for badge in badges %}
+                            <li><strong>badge Earned</strong></li>
+                        {% endfor %}
+                        
+                        <!-- <li>Badge 2: <strong>Locked</strong></li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <div>
+                <button class="btn-logout" type="submit">Logout</button>
+            </div>
+        
+        </div>
+    </form>
+
+</body>
+</html>

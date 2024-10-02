@@ -33,7 +33,7 @@ def login():
         print(login_data)
         username = login_data.get("username")
         password = login_data.get("password")
-        flash(f"received {username},{password}")
+        # flash(f"received {username},{password}")
         user = mongo.db.userinfo.find_one({"username":username})
         login_at = None
         if user and bcrypt.checkpw(password.encode('utf-8'),user["password"]):
@@ -45,11 +45,14 @@ def login():
             session["logged_in"] = True
             session["username"] = username
             session["email"] = user["email"]
-            session["loginedAt"] = user["loginedAt"]
+            session["loginedAt"] = login_at
             session["userMood"] = user["userMood"]
+            session["sessionDuration"] = user["sessionDuration"]
             session["activities"] = user["activities"]
             session["badges"] = user["badges"]
             session["total_points"] = user["total_points"]
+            session["chat_history"] = user["chat_history"]
+            print(session["chat_history"])
             # if request.method == 'PATCH':
             duration = user["loginedAt"] - login_at
             duration_in_days = duration.days
@@ -74,29 +77,44 @@ def login():
 @auth.route("/signup",methods=['GET','POST'])
 def signup():
     try:
-        user_data = request.form
-        password = user_data.get("password")
+        
         if request.method == 'POST':
+            user_data = request.form
+            login_at = datetime.now()
+            username = user_data.get("username")
+            password = user_data.get("password")
+            session["username"] = username
+            session["email"] = user_data["email"]
+            session["loginedAt"] = login_at
+            session["sessionDuration"] = 0
+            session["userMood"] = "happy"
+            session["activities"] = []
+            session["badges"] = []
+            session["total_points"] = 0
             checkUser = mongo.db.userinfo.find_one({"username":user_data["username"]})
             if checkUser:
-                return jsonify({"message":"Username in use!","category":"error"})
+                flash("Username in use!",category="error")
+                return render_template("signup.html")
             user = user_schema.load(user_data)
             # user = userSchema(user_data)
             mongo.db.userinfo.insert_one(user)
             salt = bcrypt.gensalt()
             hashed_password = bcrypt.hashpw(password.encode('utf-8'),salt)
             mongo.db.userinfo.update_one(
-                {"username":user_data.get("username")},
-                {"$set":{"password":hashed_password}}
+                {"username":username},
+                {"$set":{"password":hashed_password,
+                         "username":username,
+                         "email":user_data["email"],
+                         "loginedAt":login_at}}
             )
-            session["logged_in"] = True
-            session["username"] = user_data["username"]
+            # session["logged_in"] = True
             # login_user(checkUser,remember=True)
             flash("User created successfully!",category="success")
             return redirect(url_for("routes.dashboard"))
         else:
             return render_template("signup.html")
     except ValidationError as err:
+
         return jsonify(err.messages),400
 
 
@@ -107,7 +125,7 @@ def signup():
 @auth.route("/logout",methods=["POST",'GET'])
 @login_required
 def logout():
-    
+    print(session)
     if session:
         username = session.get("username")
         loginedAt = session["loginedAt"]
@@ -118,7 +136,11 @@ def logout():
 
         mongo.db.userinfo.update_one(
             {"username":username},
-            {"$set":{"sessionDuration":duration}})
+            {"$set":{
+                    "sessionDuration":duration,
+                    "chat_history":session.get("chat_history")
+                }
+            })
         if duration < 15:
             flash("leaving so soon",category="check")
         session.clear()

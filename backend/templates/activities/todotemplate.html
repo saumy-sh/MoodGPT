@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Meditation Activity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/todotemplate.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>{{ title }}</h1>
+
+        <p>{{ activity_data }}</p>
+
+        <!-- Timer Section -->
+        <div id="timer-section">
+            <div class="timer" id="timer">{{ duration }}</div>
+            <button id="start-btn">Start Your Activity</button>
+        </div>
+
+        <!-- Reflection Section -->
+        <div id="reflection-section" class="hidden reflection-box">
+            <h2>Reflection</h2>
+            <p>{{ reflection_data }}</p>
+            <form id="reflection-form">
+                <textarea name="reflection" placeholder="Write your reflection here..." required></textarea>
+                <button type="submit">Submit Reflection</button>
+            </form>
+        </div>
+
+        <!-- Popup for Points Earned -->
+        <div id="points-popup" class="popup">
+            <div class="popup-content">
+                <span class="close" id="close-popup">&times;</span>
+                <h2>Congratulations!</h2>
+                <p>You have earned <span id="points-earned"></span> points!</p>
+                <button id="continue-btn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Timer functionality
+        console.log("{{ duration }}")
+        let activityTime = "{{ duration }}"*60 ; // in minutes
+        let timerElement = document.getElementById('timer');
+        let startButton = document.getElementById('start-btn');
+        let reflectionSection = document.getElementById('reflection-section');
+        let popup = document.getElementById('points-popup');
+        let pointsElement = document.getElementById('points-earned');
+        let timerInterval;
+
+        function startTimer(duration) {
+            let timeRemaining = duration;
+            startButton.disabled = true;
+
+            timerInterval = setInterval(function () {
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                timerElement.textContent = minutes + ':' + seconds;
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = "Time's up!";
+                    reflectionSection.classList.remove('hidden'); // Show reflection section
+                }
+                timeRemaining--;
+            }, 1000);
+        }
+
+        startButton.addEventListener('click', function() {
+            startTimer(activityTime);
+        });
+
+        // Handle reflection form submission
+        document.getElementById('reflection-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Calculate points earned
+            let pointsEarned = "{{ points }}"; // Example points earned
+            pointsElement.textContent = pointsEarned; // Show points in the popup
+
+            // Show the points popup
+            popup.style.display = "flex"; 
+
+            // Update user points in the backend
+            fetch('/update_points', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    points: pointsEarned // Send the points earned
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message); // Handle response if needed
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Close the popup when the close button is clicked
+        document.getElementById('close-popup').onclick = function() {
+            popup.style.display = "none";
+            reflectionSection.classList.add('hidden'); // Hide the reflection section
+        };
+
+        // Close the popup when the continue button is clicked
+        document.getElementById('continue-btn').onclick = function() {
+            popup.style.display = "none";
+            // You can also navigate to another page or do something else here
+        };
+    </script>
+
+</body>
+</html>

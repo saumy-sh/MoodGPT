@@ -1,0 +1,183 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0e6ff; /* Light purple background */
+
+}
+
+/* Top Navigation Bar */
+.topnav {
+    overflow: hidden;
+    background-color: #6A0DAD;
+    padding: 10px 20px;
+}
+
+.topnav a {
+    float: right; /* Align links to the right */
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.topnav a:hover {
+    background-color: #E2C2E6;
+    color: black;
+}
+
+/* Sidebar styles */
+.sidebar {
+    height: 80%;
+    width: 250px;
+    box-shadow: "7E60BF";
+    border-width: solid black 4px ;
+    border-radius: 8px;
+    position: fixed;
+    top: 80px; /* Position below the top navigation bar */
+    left: 10px;
+    background-color: #E2C2E6; /* Soft Lavender */
+    color: #333; /* Dark Gray for text in sidebar */
+    padding: 20px; /* Add padding */
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.user-info img {
+    width: 50px; /* Adjust size */
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.sidebar h2, .sidebar h3 {
+    color: black;
+    margin: 0 0 10px;
+}
+
+.sidebar p {
+    color: black;
+    padding: 5px 15px;
+    margin: 0;
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    display: block;
+    transition: background 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #1abc9c;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 300px; /* Sidebar width + padding */
+    padding: 20px;
+    display: flex; /* Flexbox for layout */
+    flex-direction: column; /* Column layout */
+}
+
+/* Chatbot window */
+.chat-container {
+    background-color: #E6E6FA; /* Light Purple */
+    height: 900px;
+    padding: 20px;
+    margin-left: 20px; /* Space between sidebar and chat */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1; /* Take the remaining space */
+}
+
+.chat-messages {
+    background-color: #E6E6FA; /* Light Purple */
+    border: solid black 4px;
+    border-radius: 8px;
+    height: 400px;
+    width: 90%;
+    overflow-y: auto; /* Scrollable messages */
+    margin-bottom: 10px; /* Space between messages and input */
+}
+
+.message {
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 5px;
+    color: #FFFFFF; /* Text color for both user and bot messages */
+}
+
+.message.user {
+    background-color: #9370DB; /* Medium Purple for user messages */
+    color: white;
+    text-align: right; /* Align user messages to the right */
+}
+
+.message.bot {
+    background-color: #DDA0DD; /* Plum for bot messages */
+}
+
+.card {
+    background: white;
+    height: 150px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+/* Logout button styles */
+.btn-logout {
+    float: right; /* Align links to the right */
+    display: block;
+    background-color: #008080; /* Teal for buttons */
+    color: white; /* White text for buttons */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Align logout button to the right */
+}
+
+.btn-logout:hover {
+    background-color: #005757; /* Darker Teal for hover effect */
+}
+
+/* Input styles */
+.chat-input-container {
+    display: flex;
+    justify-content: space-between; /* Space between input and button */
+}
+
+.chat-input {
+    flex: 1; /* Take up available space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px; /* Space between input and button */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        top: 0; /* Reset top position for mobile */
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}

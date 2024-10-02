@@ -1,0 +1,77 @@
+/* login.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0e6ff; /* Light purple background */
+}
+
+.login-container {
+    width: 300px; /* Fixed width for the container */
+    padding: 20px;
+    margin: 100px auto; /* Center the container */
+    background-color: white; /* White background for the login form */
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
+
+h2 {
+    color: #6a0dad; /* Purple color for the title */
+    text-align: center;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Full width */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #6a0dad; /* Purple border on focus */
+}
+
+button {
+    width: 100%; /* Full width button */
+    padding: 10px;
+    background-color: #6a0dad; /* Purple background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #570a8a; /* Darker purple on hover */
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 15px; /* Space above the signup link */
+}
+
+.signup-link a {
+    color: #6a0dad; /* Purple color for the link */
+    text-decoration: none; /* Remove underline */
+}
+
+.signup-link a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 10px; /* Space above error messages */
+}
+
+.success {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+}

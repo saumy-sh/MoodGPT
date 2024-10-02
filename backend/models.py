@@ -13,6 +13,7 @@ class userSchema(Schema):
     activities = fields.List(fields.String, missing=[])
     badges = fields.List(fields.String, missing=[])
     total_points = fields.Integer(missing=0)
+    chat_history = fields.List(fields.Dict, missing=[])
 
 
 # class userSchema(UserMixin):

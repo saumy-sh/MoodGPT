@@ -15,8 +15,7 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 URI = os.getenv("URI")
 
-print("secret",SECRET_KEY)
-print("uri",URI)
+
 
 def create_app():
     app = Flask(__name__)
@@ -25,9 +24,12 @@ def create_app():
     app.config["MONGO_URI"] = URI
     from  .routes import routes
     from .auth import auth
+    from .chat_ai import chat_ai
+    # from .routes import todos
     
     app.register_blueprint(routes,url_prefix = "/")
     app.register_blueprint(auth, url_prefix = "/")
+    app.register_blueprint(chat_ai,url_prefix = "/")
 
     mongo.init_app(app)
     

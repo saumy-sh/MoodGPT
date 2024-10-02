@@ -3,69 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <title>MoodGPT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 <body>
 
+    <!-- Top Navigation Bar -->
+    
+    <div class="topnav">
+        <button class="btn-logout" type="submit" onclick="logout()">Logout</button>
+        <a href="#">Suggest a Song</a>
+        <a href="{{ url_for('routes.todo') }}">Daily Todos</a>
+        <a href="#">Badges</a>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="#">Dashboard</a>
-        <a href="#">Activities</a>
-        <a href="#">Badges</a>
-        <a href="#">Settings</a>
-        <a href="#">Logout</a>
+        <div class="user-info">
+            <img src="{{ url_for('static', filename='images/profile_pic.jpg') }}" alt="Profile Picture"> <!-- Replace with actual image path -->
+            <h2>{{ username }}</h2>
+        </div>
+        <div class="card">
+            <h3>Total Points</h3>
+            <p>{{ total_points }}</p>
+        </div>
+        <div class="card">
+            <h3>Badges Earned</h3>
+            {% if session.get('badges') %}
+                <ul>
+                    {% for badge in session['badges'] %}
+                        <li><strong>{{ badge }}</strong></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No badges earned yet!</p>
+            {% endif %}
+        </div>
+        
+        <div class="card">
+            <h3>Completed Activities</h3>
+            {% if session.get('activities') %}
+                <ul>
+                    {% for activity in session['activities'] %}
+                        <li><strong>{{ activity }}</strong></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No activities completed yet today!</p>
+
+            {% endif %}
+        </div>
+        
+        
     </div>
 
     <!-- Main Content -->
-    <form action="/logout" method="post">
+    <form>
         <div class="main-content">
-            <h1>Welcome to Your Dashboard</h1>
+            <h1>Welcome to MoodGPT</h1>
 
-            <!-- User info -->
-            <div class="card">
-                <h2>User Info</h2>
-                <p>Username: {{ username }}</p>
-                <p>Last Login: {{ last_login }}</p>
-            </div>
-
-            <!-- Dashboard Content -->
-            <div class="grid-container">
-                <!-- Activities -->
-                <div class="card">
-                    <h2>Completed Daily Activities</h2>
-                    <p>Complete your daily tasks to earn points and badges.</p>
-                    <!-- Example activities placeholder -->
-                    <ul>
-                        activities = {{ activities }}
-                        {% for activity in activities%}
-                            <li><strong>activity</strong></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <!-- Badges -->
-                <div class="card">
-                    <h2>Your Badges</h2>
-                    <p>Earn badges by completing tasks and activities.</p>
-                    <ul>
-                        badges = {{ badges }}
-                        {% for badge in badges %}
-                            <li><strong>badge Earned</strong></li>
-                        {% endfor %}
-                        
-                        <!-- <li>Badge 2: <strong>Locked</strong></li> -->
-                    </ul>
+            <!-- Chatbot-like interface -->
+            <div class="chat-container">
+                <h2>Chatbot</h2>
+                <div class="chat-messages" id="chatMessages">Output is shown here!!</div> <!-- Message display area -->
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here...">
+                    <button class="btn-logout" type="button" onclick="sendMessage()">Send</button>
                 </div>
             </div>
 
             <!-- Logout Button -->
-            <div>
-                <button class="btn-logout" type="submit">Logout</button>
-            </div>
-        
+           
         </div>
     </form>
 
+    <script>
+        // Get the username, last login, and completed activities from the template
+        const username = "{{ username }}"; 
+        const lastLogin = "{{ last_login }}"; 
+        const completedActivities = JSON.parse('{{ activities | tojson | safe }}'); // Ensure it's parsed as JSON
+
+        // Function to initialize the chat session with user data
+        function initializeChat() {
+            fetch('/update_info', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                // body: JSON.stringify({
+                //     username: username,
+                //     last_login: lastLogin,
+                //     activities: completedActivities
+                // }) // Send the data in the correct format
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle any initial response from the bot if needed
+                console.log(data); // You can use this for any initial message if necessary
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Call the function on page load
+        window.onload = initializeChat;
+
+        // Function to logout 
+        function logout() {
+            // Send POST request to Flask logout route
+            fetch('/logout', {
+                method: 'POST',
+                credentials: 'include', // Important to include session cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Optional: indicates it's an AJAX request
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // On successful logout, redirect to the login page or show flash messages
+                    response.text().then(text => {
+                        alert('Logged out successfully. Redirecting to login...');
+                        window.location.href = '/login'; // Redirect to login page
+                    });
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+                alert('An error occurred while logging out.');
+            });
+        }
+
+        // Function to send a message
+        function sendMessage(){
+            const input = document.getElementById('chatInput');
+            const message = input.value;
+
+            if (message.trim() === '') return; // Do not send empty messages
+
+            // Append user's message to chat
+            const chatMessages = document.getElementById('chatMessages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user';
+            userMessage.textContent = message;
+            chatMessages.appendChild(userMessage);
+
+            // Clear input field
+            input.value = '';
+
+            // Send user message to the server
+            fetch('/chat', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,
+                    username: username // Include username in the request
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                // Append the bot's response to chat
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                botMessage.textContent = data.response;
+                chatMessages.appendChild(botMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+            })
+            .catch(error => console.error('Error:', error));
+
+            // Auto-scroll to the bottom of chat
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+    </script>
 </body>
 </html>

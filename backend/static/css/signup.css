@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0e6ff; /* Light purple background */
+    margin: 0;
+    padding: 0;
+}
+
+.signup-container {
+    width: 400px;
+    margin: 100px auto; /* Center the container vertically */
+    padding: 20px;
+    background: white; /* White background for the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align text */
+}
+
+.signup-container h2 {
+    color: #6a0dad; /* Dark purple color for the heading */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.signup-container input {
+    width: 100%; /* Full width inputs */
+    padding: 10px;
+    margin: 10px 0; /* Space between inputs */
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+}
+
+.signup-container button {
+    background-color: #6a0dad; /* Purple button */
+    color: white; /* White text */
+    border: none;
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    width: 100%; /* Full width button */
+}
+
+.signup-container button:hover {
+    background-color: #5b0c99; /* Darker purple on hover */
+}
+
+.signup-container p {
+    margin-top: 15px; /* Space above the paragraph */
+}
+
+.signup-container a {
+    color: #6a0dad; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.signup-container a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+.error {
+    color: red; /* Red color for error messages */
+    margin-top: 10px; /* Space above error messages */
+}

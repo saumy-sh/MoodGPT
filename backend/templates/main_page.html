@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodGPT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>MoodGPT</h1>
+        <p>Your personalized mental health companion, helping you track emotions, complete daily tasks, and improve well-being.</p>
+        
+        <div class="button-container">
+            <form action="/signup" method="get">
+                <button class="button">Sign Up</button>
+            </form>
+            <form action="/login" method="get">
+                <button class="button">Login</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,session,request,flash,url_for,current_app
+from flask import Blueprint,render_template,session,request,flash,url_for,current_app,jsonify
 from backend.auth import login_required
 from . import mongo
 import pandas as pd
@@ -69,15 +69,16 @@ def todotemplate():
             duration = todo["duration"]
             break
     if title is None:
-        return "Activity not found", 404
-    return render_template("activities/todotemplate.html",
-                           id_no = id_no,
+        return jsonify({"message":"Activity not found"})
+    redirect_url = url_for('activities/todotemplate.html', 
+                           id_no=id_no,
                            title = title,
                            activity_data = activity_data,
                            reflection_data = reflection_data,
                            points = points,
-                           duration = duration
-                           )
+                           duration = duration)  # URL for the new page
+    return jsonify({'message': 'Success', 'redirect_url': redirect_url})
+
 
 
 @routes.route("/")

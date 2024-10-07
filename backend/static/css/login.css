@@ -1,4 +1,4 @@
-/* login.css */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -35,7 +35,7 @@ input[type="password"]:focus {
     border-color: #6a0dad; /* Purple border on focus */
 }
 
-button {
+.login button {
     width: 100%; /* Full width button */
     padding: 10px;
     background-color: #6a0dad; /* Purple background */
@@ -46,7 +46,7 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
+.login button:hover {
     background-color: #570a8a; /* Darker purple on hover */
 }
 
@@ -64,14 +64,15 @@ button:hover {
     text-decoration: underline; /* Underline on hover */
 }
 
+
 .error {
     color: red;
     text-align: center;
     margin-top: 10px; /* Space above error messages */
-}
+} 
 
-.success {
+.success { 
     color: green;
     text-align: center;
     margin-top: 10px;
-}
+} 

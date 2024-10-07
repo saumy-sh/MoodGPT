@@ -16,7 +16,6 @@
         {% for todo in todos  %}
             <div class="card {{ 'completed' if todo['name'] in activities else '' }}">
                 <!-- Calling getActivity with todo['id_no'] on button click -->
-                
                 <button id = "{{ todo['id_no'] }}" onclick="getActivity(this.id)">{{ todo['name'] }}</button> 
                 
                 <p>Activity points: {{ todo['points'] }}</p><br>
@@ -29,26 +28,36 @@
         function getActivity(id_no) {
             console.log("Selected Activity ID:", id_no); // Log the selected ID
 
-            fetch('/todotemplate', { // Make sure this matches your Flask route
+            fetch('/todos', { // Make sure this matches your Flask route
                 method: 'POST',
                 credentials: "include",
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
+                    
                 },
                 body: JSON.stringify({
                     id_no: id_no // Send the activity ID
                 })
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok: " + response.statusText);
+                if (response.ok) {
+                    // On successful logout, redirect to the login page or show flash messages
+                    response.text().then(text => {
+                        alert('Redirecting to Activity');
+                        window.location.href = '/activity'
+                    });
+                }else{
+                    alert("An error occured...Try again.")
                 }
-                return response.json(); // This will parse the JSON
             })
             .then(data => {
                 console.log("Response from server:", data); // Log the response for debugging
-                // You can handle the response data here (e.g., update the UI)
+                // if (data.redirect_url){
+                //     window.location.href = data.redirect_url;
+                // } else{
+                //     alert("No url found...");
+                // }
+
             })
             .catch(error => console.error('Error:', error)); // Handle any errors
         }

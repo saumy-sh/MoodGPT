@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/todotemplate.css') }}">
 </head>
 <body>
+    {% set title = session["title"] %}
+    {% set id_no = session["id_no"] %}
+    {% set activity_data = session["activity+_data"] %}
+    {% set reflection_data = session["reflection_data"] %}
+    {% set duration = session["duration"] %}
 
     <div class="container">
         <h1>{{ title }}</h1>
@@ -15,7 +20,7 @@
 
         <!-- Timer Section -->
         <div id="timer-section">
-            <div class="timer" id="timer">{{ duration }}</div>
+            <div class="timer" id="timer">{{ duration }} minutes</div>
             <button id="start-btn">Start Your Activity</button>
         </div>
 
@@ -42,8 +47,8 @@
 
     <script>
         // Timer functionality
-        console.log("{{ duration }}")
-        let activityTime = "{{ duration }}"*60 ; // in minutes
+        console.log("{{session['duration']}}")
+        let activityTime = "{{ session['duration'] }}"*60 ; // in minutes
         let timerElement = document.getElementById('timer');
         let startButton = document.getElementById('start-btn');
         let reflectionSection = document.getElementById('reflection-section');
@@ -80,7 +85,7 @@
             event.preventDefault(); // Prevent the default form submission
             
             // Calculate points earned
-            let pointsEarned = "{{ points }}"; // Example points earned
+            let pointsEarned = "{{ session['points'] }}"; // Example points earned
             pointsElement.textContent = pointsEarned; // Show points in the popup
 
             // Show the points popup

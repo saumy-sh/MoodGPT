@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,session,request,flash,url_for,current_app,jsonify
+from flask import Blueprint,render_template,session,request,flash,url_for,current_app,jsonify,redirect
 from backend.auth import login_required
 from . import mongo
 import pandas as pd
@@ -20,7 +20,7 @@ def dashboard():
     #     print(session)
     # else:
     #     print("no one logged in!!")
-
+    
     return render_template("dashboard.html",
                            username = session["username"],
                            last_login = session["loginedAt"],
@@ -45,15 +45,17 @@ def todo():
                             todos = todos
                            )
 
-@routes.route("/todotemplate",methods=['POST'])
+@routes.route("/todos",methods=['POST','GET'])
 @login_required
-def todotemplate():
+def todos():
     # Initialize variables to handle cases where id_no is not found
-    title = None
-    activity_data = None
-    reflection_data = None
-    points = None
-    duration = None
+    if 'title' in session:
+        del session["title"]
+        del session["activity_data"]
+        del session["reflection_data"]
+        del session["duration"]
+        del session["points"]
+
     print(request.get_json())
     id_no = request.get_json().get('id_no')
     file_path = os.path.join(current_app.root_path, 'static', 'database', 'activities.xlsx')
@@ -62,24 +64,26 @@ def todotemplate():
     for todo in todos:
         print(todo)
         if todo.get("id_no") == int(id_no):
-            title = todo["name"]
-            activity_data = todo["activity_data"]
-            reflection_data = todo["reflection_data"]
-            points = todo["points"]
-            duration = todo["duration"]
+            session['title'] = todo["name"]
+            session['activity_data'] = todo["activity_data"]
+            session['reflection_data'] = todo["reflection_data"]
+            session['points'] = todo["points"]
+            session['duration'] = todo["duration"]
             break
-    if title is None:
-        return jsonify({"message":"Activity not found"})
-    redirect_url = url_for('activities/todotemplate.html', 
-                           id_no=id_no,
-                           title = title,
-                           activity_data = activity_data,
-                           reflection_data = reflection_data,
-                           points = points,
-                           duration = duration)  # URL for the new page
-    return jsonify({'message': 'Success', 'redirect_url': redirect_url})
+    return jsonify({
+        "message":"redirecting to new activity"})
+    
+# id_no = id_no,
+#                            title = title,
+#                            activity_data = activity_data,
+#                            reflection_data = reflection_data,
+#                            points = points,
+#                            duration = duration
 
 
+@routes.route("/activity",methods=['POST','GET'])
+def activity():
+    return render_template('activity.html')
 
 @routes.route("/")
 def main_page():
@@ -89,8 +93,13 @@ def main_page():
 @login_required
 def update_points():
     # Logic to update the user's points in the database
-    points = request.json.get("points")
-    total_points = int(session["total_points"]) + points
+    total_points = session["total_points"] + session["points"]
+    session["total_points"] = total_points
+    del session["title"]
+    del session["activity_data"]
+    del session["reflection_data"]
+    del session["duration"]
+    del session["points"]
     mongo.db.userinfo.update_one(
         {"username":session["username"]},
         {"$set":{
@@ -99,4 +108,5 @@ def update_points():
     )
     
     
-    return flash("Points updated successfully!",category="success")
+    flash("Points updated successfully!",category="success")
+    return redirect(url_for("routes.todo"))

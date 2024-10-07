@@ -98,7 +98,10 @@ def update_history(new_message, sender="user"):
         "role": sender,
         "parts": [new_message]
     })
+    
     session['chat_history'] = history  # Save the updated history back to session
+    
+
 
 @chat_ai.route("/chat", methods=['POST', 'GET'])
 @login_required
@@ -133,11 +136,11 @@ def update_info():
     activities = session.get('activities')
     userMood = session.get('userMood')
     badges = session.get("badges")
-    print(session["chat_history"])
+    
 
     # If new activities are completed, update the history
     init_chat_history(activities,username,userMood,loginedAt,badges)
-    print(session["chat_history"])
+
     # Optionally, start a chat session here if needed
     # chat_session = model.start_chat(history=session['chat_history'])
 

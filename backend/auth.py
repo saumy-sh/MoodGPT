@@ -91,6 +91,7 @@ def signup():
             session["activities"] = []
             session["badges"] = []
             session["total_points"] = 0
+            session["chat_history"] = []
             checkUser = mongo.db.userinfo.find_one({"username":user_data["username"]})
             if checkUser:
                 flash("Username in use!",category="error")
@@ -109,7 +110,8 @@ def signup():
             )
             # session["logged_in"] = True
             # login_user(checkUser,remember=True)
-            flash("User created successfully!",category="success")
+            # flash("User created successfully!",category="success")
+            
             return redirect(url_for("routes.dashboard"))
         else:
             return render_template("signup.html")

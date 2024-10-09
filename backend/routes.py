@@ -62,7 +62,6 @@ def todos():
     df = pd.read_excel(file_path)
     todos = df.to_dict(orient='records')
     for todo in todos:
-        print(todo)
         if todo.get("id_no") == int(id_no):
             session['title'] = todo["name"]
             session['activity_data'] = todo["activity_data"]
@@ -92,6 +91,10 @@ def main_page():
 @routes.route("/update_points",methods=['POST','GET'])
 @login_required
 def update_points():
+    print(session)
+    # Logic to update completed activities
+    session["activities"].append(session["title"])
+    
     # Logic to update the user's points in the database
     total_points = session["total_points"] + session["points"]
     session["total_points"] = total_points
@@ -103,10 +106,12 @@ def update_points():
     mongo.db.userinfo.update_one(
         {"username":session["username"]},
         {"$set":{
-            "total_points":total_points
+            "total_points":total_points,
+            "activities":session["activities"]
         }}
     )
     
     
     flash("Points updated successfully!",category="success")
-    return redirect(url_for("routes.todo"))
+    return redirect(url_for("todo"))
+     

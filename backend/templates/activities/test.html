@@ -71,24 +71,30 @@
 </html>
 
 
-<!-- <div class="card {{ 'completed' if 'Meditation or Deep Breathing' in activities else '' }}">
-    <a href="{{url_for('routes.todotemplate')}}">Meditation or Deep Breathing</a>
-</div>
-<div class="card {{ 'completed' if 'Physical Exercise' in activities else '' }}">
-    <a href="#">Physical Exercise</a>
-</div>
-<div class="card {{ 'completed' if 'Positive Affirmations' in activities else '' }}">
-    <a href="#">Positive Affirmations</a>
-</div>
-<div class="card {{ 'completed' if 'Mood Check-In' in activities else '' }}">
-    <a href="#">Mood Check-In</a>
-</div>
-<div class="card {{ 'completed' if 'Digital Detox' in activities else '' }}">
-    <a href="#">Digital Detox</a>
-</div>
-<div class="card {{ 'completed' if 'Mindful Eating' in activities else '' }}">
-    <a href="#">Mindful Eating</a>
-</div>
-<div class="card {{ 'completed' if 'Creative Expression' in activities else '' }}">
-    <a href="#">Creative Expression</a>
-</div> -->
+
+
+<!-- // Send POST request to Flask logout route
+            fetch('/logout', {
+                method: 'POST',
+                credentials: 'include', // Important to include session cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Optional: indicates it's an AJAX request
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // On successful logout, redirect to the login page or show flash messages
+                    response.text().then(text => {
+                        // alert('Logged out successfully. Redirecting to login...');
+                        window.location.href = '/login'; // Redirect to login page
+                    });
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+                alert('An error occurred while logging out.'); -->
+            });
+        }

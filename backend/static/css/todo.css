@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 20px;
     background-color: #f0e6ff; /* Light purple background */
+    
 }
 
 h1 {
@@ -19,8 +20,8 @@ h1 {
 
 .card {
     width: 200px; /* Fixed width for the cards */
-    padding: 15px;
     height: 200px;
+    padding: 10px;
     margin: 10px;
     background-color: #6a0dad; /* Default purple background */
     color: white;
@@ -29,12 +30,30 @@ h1 {
     transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
     cursor: pointer;
     text-decoration: none; /* Remove underline from links */
+    display: flex; /* Enables flexbox layout */
+    flex-direction: column; /* Stack content vertically */
+    justify-content: space-around; /* Centers content vertically */
+    align-items: center; /* Centers content horizontally */
+}
+
+.card h2{
+    font-size: 18px;
+    margin-bottom: 10px;
     font-weight: bold;
 }
+
 .card p{
-    font-weight: bold;
+    font-size: 14px;
     color: white;
     text-align: center;
+    margin: 2px 0;
+   
+}
+
+.card img{
+    width: 50px;
+    height: 50px;
+    margin: 8px 0; /* Space around the image */
 }
 
 
@@ -46,6 +65,8 @@ h1 {
 
 .card.completed {
     background-color: #28a745; /* Green background for completed activities */
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 /* Change background color on hover for completed cards */
@@ -58,6 +79,29 @@ h1 {
     text-decoration: none; /* Remove underline from links */
 }
 
-.card a:hover {
-    text-decoration: underline; /* Underline links on hover, if you want this effect */
+.back{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s, transform 0.3s;   
 }
+
+.back a,
+.back a:visited{
+    font-size: large;
+    background-color: #6a0dad; /* Default purple background */
+    color: white;
+    margin: 10px;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+.back a:hover{
+    background-color: #570a8a; /* Darker purple on hover */
+    transform: scale(1.05);
+}
+
+

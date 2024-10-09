@@ -9,14 +9,17 @@
 <body>
     {% set title = session["title"] %}
     {% set id_no = session["id_no"] %}
-    {% set activity_data = session["activity+_data"] %}
+    {% set activity_data = session["activity_data"] %}
     {% set reflection_data = session["reflection_data"] %}
     {% set duration = session["duration"] %}
 
     <div class="container">
-        <h1>{{ title }}</h1>
+        <div class="main-body">
+            <h1>{{ title }}</h1>
 
-        <p>{{ activity_data }}</p>
+            <p>{{ activity_data }}</p>
+        </div>
+        
 
         <!-- Timer Section -->
         <div id="timer-section">
@@ -37,7 +40,7 @@
         <!-- Popup for Points Earned -->
         <div id="points-popup" class="popup">
             <div class="popup-content">
-                <span class="close" id="close-popup">&times;</span>
+                
                 <h2>Congratulations!</h2>
                 <p>You have earned <span id="points-earned"></span> points!</p>
                 <button id="continue-btn">Continue</button>
@@ -83,42 +86,45 @@
         // Handle reflection form submission
         document.getElementById('reflection-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
-            
-            // Calculate points earned
-            let pointsEarned = "{{ session['points'] }}"; // Example points earned
-            pointsElement.textContent = pointsEarned; // Show points in the popup
 
             // Show the points popup
             popup.style.display = "flex"; 
 
-            // Update user points in the backend
-            fetch('/update_points', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    points: pointsEarned // Send the points earned
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message); // Handle response if needed
-            })
-            .catch(error => console.error('Error:', error));
+            
+            
         });
-
-        // Close the popup when the close button is clicked
-        document.getElementById('close-popup').onclick = function() {
-            popup.style.display = "none";
-            reflectionSection.classList.add('hidden'); // Hide the reflection section
-        };
 
         // Close the popup when the continue button is clicked
         document.getElementById('continue-btn').onclick = function() {
             popup.style.display = "none";
-            // You can also navigate to another page or do something else here
+
+             // Calculate points earned
+            let pointsEarned = "{{ session['points'] }}"; // points earned
+            pointsElement.textContent = pointsEarned; // Show points in the popup
+
+            // Creating a form element so that flashing of messages works
+            const form = document.createElement('form');
+            form.type = 'none';
+            form.method = 'POST';
+            form.action = '/update_points';  // points updation route
+
+            // Creating a hidden input field for points
+            const pointInput = document.createElement('input');
+            pointInput.type = 'hidden';
+            pointInput.name = 'points';  // This will be sent in the POST data
+            pointInput.value = pointsEarned;   // Set the point value
+
+            // Append the hidden input field to the form
+            form.appendChild(pointInput);
+
+            // Append the form to the body (this is required for submission)
+            document.body.appendChild(form);
+
+            // Submit the form programmatically
+            form.submit();
+            // Remove the form element
+            form.remove();
+
         };
     </script>
 

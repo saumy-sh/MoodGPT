@@ -48,7 +48,19 @@ def login():
             session["loginedAt"] = login_at
             session["userMood"] = user["userMood"]
             session["sessionDuration"] = user["sessionDuration"]
-            session["activities"] = user["activities"]
+            if login_at.date() != user["loginedAt"].date():
+                if "activities" in session:
+                    session["activities"].clear()
+                    mongo.db.userinfo.update_one(
+                        {"username":username},
+                        {"$set":{"activities":session["activities"]}
+                    })
+                else:
+                    session["activities"] = user["activities"]
+
+            else:
+                session["activities"] = user["activities"]
+
             session["badges"] = user["badges"]
             session["total_points"] = user["total_points"]
             session["chat_history"] = user["chat_history"]
@@ -57,7 +69,7 @@ def login():
             duration = user["loginedAt"] - login_at
             duration_in_days = duration.days
             if duration_in_days > 5:
-                flash('You signed in after a long break, is everything ok',category="check")
+                flash('You signed in after a long break, hope so everything is ok.:)',category="success")
             mongo.db.userinfo.update_one(
                 {"username":username},
                 {"$set":{"loginedAt":login_at}}
@@ -77,7 +89,6 @@ def login():
 @auth.route("/signup",methods=['GET','POST'])
 def signup():
     try:
-        
         if request.method == 'POST':
             user_data = request.form
             login_at = datetime.now()
@@ -127,14 +138,13 @@ def signup():
 @auth.route("/logout",methods=["POST",'GET'])
 @login_required
 def logout():
-    print(session)
-    if session:
+    try:
         username = session.get("username")
         loginedAt = session["loginedAt"]
         # user = mongo.db.userinfo.find_one({"username":username})
         duration = datetime.now().replace(tzinfo=None) - loginedAt.replace(tzinfo=None)
-        print(duration)
         duration = duration.total_seconds()/60
+        print("duration",duration)
 
         mongo.db.userinfo.update_one(
             {"username":username},
@@ -143,10 +153,15 @@ def logout():
                     "chat_history":session.get("chat_history")
                 }
             })
-        if duration < 15:
-            flash("leaving so soon",category="check")
         session.clear()
-        flash("Logged out successfully",category="success")
-        return render_template("login.html")
-    else:
-        redirect("login.html")
+        
+        if duration < 15:
+            flash("Leaving so soon :( . Hope to see you soon!",category="success")
+        else:
+            flash("Logged out successfully",category="success")
+
+        return redirect(url_for("auth.login"))
+    except :
+        flash("Logout failed due to server error!",category="error")
+        return redirect(url_for("auth.login"))
+        

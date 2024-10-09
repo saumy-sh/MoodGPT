@@ -6,6 +6,12 @@ body {
 
 }
 
+.dashboard{
+    margin-top: 0;
+    padding-top: 0;
+    
+}
+
 /* Top Navigation Bar */
 .topnav {
     overflow: hidden;
@@ -36,12 +42,13 @@ body {
     border-width: solid black 4px ;
     border-radius: 8px;
     position: fixed;
-    top: 80px; /* Position below the top navigation bar */
+    top: 10%; /* Position below the top navigation bar */
     left: 10px;
     background-color: #E2C2E6; /* Soft Lavender */
     color: #333; /* Dark Gray for text in sidebar */
-    padding: 20px; /* Add padding */
-    overflow-y: auto; /* Enable scrolling if content exceeds height */
+    padding: 10px; /* Add padding */
+    display: flex;
+    flex-direction: column; 
 }
 
 .user-info {
@@ -60,19 +67,20 @@ body {
 
 .sidebar h2, .sidebar h3 {
     color: black;
-    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .sidebar p {
     color: black;
-    padding: 5px 15px;
     margin: 0;
+    font-size: 14px;
 }
 
 .sidebar a {
     padding: 10px 15px;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 10px;
     color: black;
     display: block;
     transition: background 0.3s;
@@ -103,7 +111,6 @@ body {
 
 .chat-messages {
     background-color: #E6E6FA; /* Light Purple */
-    border: solid black 4px;
     border-radius: 8px;
     height: 400px;
     width: 90%;
@@ -128,14 +135,42 @@ body {
     background-color: #DDA0DD; /* Plum for bot messages */
 }
 
-.card {
-    background: white;
-    height: 150px;
-    padding: 20px;
+.sections {
+    height: 300px;
     margin-bottom: 20px;
+}
+.points{
+    margin-bottom: 0;
+}
+.badges,
+.activity{
+    display: flex;
+    flex-direction: column; /* Align items vertically */
+    overflow-y: auto; /* Enable scrolling but hide scrollbar */
+    max-height: 300px; /* Restrict the height */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+/* Hide scrollbar for webkit browsers */
+.badges::-webkit-scrollbar,
+.activity::-webkit-scrollbar {
+    display: none;
+}
+
+.card{
+    padding: 10px;
+    margin-bottom: 10px; /* Space between cards */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+    background-color: white;
+    color: black;
+    width: 200px;
+    height: auto; /* Allow the height to adjust to content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Center text inside the card */
+    font-size: 14px;
 }
 
 /* Logout button styles */

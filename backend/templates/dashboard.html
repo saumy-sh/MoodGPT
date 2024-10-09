@@ -4,79 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoodGPT</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 <body>
 
-    <!-- Top Navigation Bar -->
-    
-    <div class="topnav">
-        <button class="btn-logout" type="submit" onclick="logout()">Logout</button>
-        <a href="#">Suggest a Song</a>
-        <a href="{{ url_for('routes.todo') }}">Daily Todos</a>
-        <a href="#">Badges</a>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="user-info">
-            <img src="{{ url_for('static', filename='images/profile_pic.jpg') }}" alt="Profile Picture"> <!-- Replace with actual image path -->
-            <h2>{{ username }}</h2>
-        </div>
-        <div class="card">
-            <h3>Total Points</h3>
-            <p>{{ total_points }}</p>
-        </div>
-        <div class="card">
-            <h3>Badges Earned</h3>
-            {% if session.get('badges') %}
-                <ul>
-                    {% for badge in session['badges'] %}
-                        <li><strong>{{ badge }}</strong></li>
-                    {% endfor %}
-                </ul>
+    <!-- Showing flash messages if any -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category,message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             {% else %}
-                <p>No badges earned yet!</p>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% endwith %} 
+
+    <div class="dashboard">
+        <!-- Top Navigation Bar -->
+        <div class="topnav">
+            <button class="btn-logout" type="submit" onclick="logout()">Logout</button>
+            <a href="#">Suggest a Song</a>
+            <a href="{{ url_for('routes.todo') }}">Daily Todos</a>
+            <a href="#">Badges</a>
         </div>
-        
-        <div class="card">
-            <h3>Completed Activities</h3>
-            {% if session.get('activities') %}
-                <ul>
-                    {% for activity in session['activities'] %}
-                        <li><strong>{{ activity }}</strong></li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No activities completed yet today!</p>
 
-            {% endif %}
-        </div>
-        
-        
-    </div>
-
-    <!-- Main Content -->
-    <form>
-        <div class="main-content">
-            <h1>Welcome to MoodGPT</h1>
-
-            <!-- Chatbot-like interface -->
-            <div class="chat-container">
-                <h2>Chatbot</h2>
-                <div class="chat-messages" id="chatMessages"></div> <!-- Message display area -->
-                <div class="chat-input-container">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here...">
-                    <button class="btn-logout" type="button" onclick="sendMessage()">Send</button>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="{{ url_for('static', filename='images/profile_pic.jpg') }}" alt="Profile Picture"> <!-- Replace with actual image path -->
+                <h2>{{ username }}</h2>
+            </div>
+            <div class="sections">
+                <h3>Total Points</h3>
+                <div class="points">
+                    <p>{{ total_points }}</p>
                 </div>
             </div>
+            <div class="sections">
+                <h3>Badges Earned</h3>
+                <div class="badges">
+                    {% if session.get('badges') %}
+        
+                        {% for badge in session['badges'] %}
+                            <div class="card">{{ badge }}</div>
+                        {% endfor %}
+                
+                    {% else %}
+                        <p>No badges earned yet!</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="sections">
+                <h3>Completed Activities</h3>
+                <div class="activity">
+                    {% if session.get('activities') %}
+                    
+                        {% for activity in session['activities'] %}
+                            <div class="card">{{ activity }}</div>
+                        {% endfor %}
+                    
+                    {% else %}
+                        <p>No activities completed yet today!</p>
 
-           
+                    {% endif %}
+                </div>
+            </div>
+            
+            
         </div>
-    </form>
 
+        <!-- Main Content -->
+        <form>
+            <div class="main-content">
+                <h1>Welcome to MoodGPT</h1>
+
+                <!-- Chatbot-like interface -->
+                <div class="chat-container">
+                    <h2>Chatbot</h2>
+                    <div class="chat-messages" id="chatMessages"></div> <!-- Message display area -->
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here...">
+                        <button class="btn-logout" type="button" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+
+            
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         // Get the username, last login, and completed activities from the template
         const username = "{{ username }}"; 
@@ -91,11 +117,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 }
-                // body: JSON.stringify({
-                //     username: username,
-                //     last_login: lastLogin,
-                //     activities: completedActivities
-                // }) // Send the data in the correct format
+                
             })
             .then(response => response.json())
             .then(data => {
@@ -110,30 +132,19 @@
 
         // Function to logout 
         function logout() {
-            // Send POST request to Flask logout route
-            fetch('/logout', {
-                method: 'POST',
-                credentials: 'include', // Important to include session cookies
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest' // Optional: indicates it's an AJAX request
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // On successful logout, redirect to the login page or show flash messages
-                    response.text().then(text => {
-                        alert('Logged out successfully. Redirecting to login...');
-                        window.location.href = '/login'; // Redirect to login page
-                    });
-                } else {
-                    alert('Logout failed. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('Error during logout:', error);
-                alert('An error occurred while logging out.');
-            });
+            // Sending POST request by cretaing form element
+            // Create a form element
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/logout';  // The Flask route for logging out
+
+            // Ensure form is not visible and append it to the body
+            form.style.display = 'none';
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
+            form.remove();
         }
 
         // Function to send a message

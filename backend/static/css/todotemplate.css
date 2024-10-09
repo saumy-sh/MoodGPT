@@ -1,19 +1,27 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #6a0dad; 
     margin: 0;
     padding: 20px;
 }
 .container {
+    height: 600px;
     max-width: 600px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #f0e6ff; /* Light purple background */
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
+    border-radius: 10px;
 }
-h1 {
-    color: #4CAF50;
+.main-body h1 {
+    font-size: 34px;
+    color: #6a0dad; /* Purple color for the title */
+}
+
+.main-body p{
+    color: black;
+    font-size: 14px;
 }
 .timer {
     font-size: 2em;
@@ -28,13 +36,14 @@ h1 {
 button {
     padding: 10px 20px;
     font-size: 1em;
-    background-color: #4CAF50;
+    background-color: #6a0dad;
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 10px;
 }
 button:hover {
-    background-color: #45a049;
+    background-color: #570a8a; /* Darker purple on hover */
 }
 textarea {
     width: 100%;

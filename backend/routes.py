@@ -3,6 +3,7 @@ from backend.auth import login_required
 from . import mongo
 import pandas as pd
 import os
+from flask_pymongo import DESCENDING
 
 
 routes = Blueprint("routes", __name__)
@@ -114,4 +115,11 @@ def update_points():
     
     flash("Points updated successfully!",category="success")
     return redirect(url_for("todo"))
+
+@login_required
+@routes.route('/leaderboard',methods=['GET'])
+def leaderboard():
+     # Query the 'userinfo' collection and sort by 'total_points' in descending order
+    leaderboard_data = mongo.db.userinfo.find({}, {"_id": 0, "username": 1, "total_points": 1}).sort("total_points", DESCENDING)
+    return render_template('leaderboard.html', leaderboard=leaderboard_data)
      

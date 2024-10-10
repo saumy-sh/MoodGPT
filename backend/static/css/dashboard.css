@@ -9,6 +9,7 @@ body {
 .dashboard{
     margin-top: 0;
     padding-top: 0;
+    padding-bottom: 20px;
     
 }
 
@@ -17,6 +18,7 @@ body {
     overflow: hidden;
     background-color: #6A0DAD;
     padding: 10px 20px;
+    padding-top: 0;
 }
 
 .topnav a {
@@ -36,13 +38,13 @@ body {
 
 /* Sidebar styles */
 .sidebar {
-    height: 80%;
+    height: 85%;
     width: 250px;
     box-shadow: "7E60BF";
     border-width: solid black 4px ;
     border-radius: 8px;
     position: fixed;
-    top: 10%; /* Position below the top navigation bar */
+     /* Position below the top navigation bar */
     left: 10px;
     background-color: #E2C2E6; /* Soft Lavender */
     color: #333; /* Dark Gray for text in sidebar */
@@ -63,6 +65,12 @@ body {
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+}
+
+.points img{
+    width: 30px;
+    height: 30px;
+    margin: 10px;
 }
 
 .sidebar h2, .sidebar h3 {
@@ -138,16 +146,31 @@ body {
 .sections {
     height: 300px;
     margin-bottom: 20px;
+    padding: 10px;
 }
+
+.progress{
+    margin-bottom: 10px;
+}
+
+.user-points p{
+    font-size: 18px;
+    font-weight: 800;
+}
+
 .points{
     margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    padding-right: 10px;
+    align-items: center;
 }
 .badges,
 .activity{
     display: flex;
     flex-direction: column; /* Align items vertically */
     overflow-y: auto; /* Enable scrolling but hide scrollbar */
-    max-height: 300px; /* Restrict the height */
+    max-height: 200px; /* Restrict the height */
     scrollbar-width: none; /* Hide scrollbar in Firefox */
 }
 
@@ -162,8 +185,8 @@ body {
     margin-bottom: 10px; /* Space between cards */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    color: black;
+    background-color: #6A0DAD;
+    color: white;
     width: 200px;
     height: auto; /* Allow the height to adjust to content */
     display: flex;

@@ -35,6 +35,7 @@
             <a href="#">Suggest a Song</a>
             <a href="{{ url_for('routes.todo') }}">Daily Todos</a>
             <a href="#">Badges</a>
+            <a href="{{ url_for('routes.leaderboard') }}">Leaderboard</a>
         </div>
 
         <!-- Sidebar -->
@@ -43,12 +44,37 @@
                 <img src="{{ url_for('static', filename='images/profile_pic.jpg') }}" alt="Profile Picture"> <!-- Replace with actual image path -->
                 <h2>{{ username }}</h2>
             </div>
-            <div class="sections">
+            <div class="user-points">
                 <h3>Total Points</h3>
                 <div class="points">
+                    <img src="{{ url_for('static', filename = 'images/coins.png') }}">
                     <p>{{ total_points }}</p>
                 </div>
+                <!-- Progress bar -->
+                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="{{(session['activities'] | length * 100)/8 | round(2)}}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-success" >
+                        {{ (session['activities']|length*100/8) | round(2)}} %
+                    </div>
+                </div>
             </div>
+
+            <div class="sections">
+                <h3>Completed Activities</h3>
+                
+                <div class="activity">
+                    {% if session.get('activities') %}
+                    
+                        {% for activity in session['activities'] %}
+                            <div class="card">{{ activity }}</div>
+                        {% endfor %}
+                    
+                    {% else %}
+                        <p>No activities completed yet today!</p>
+
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="sections">
                 <h3>Badges Earned</h3>
                 <div class="badges">
@@ -64,21 +90,6 @@
                 </div>
             </div>
             
-            <div class="sections">
-                <h3>Completed Activities</h3>
-                <div class="activity">
-                    {% if session.get('activities') %}
-                    
-                        {% for activity in session['activities'] %}
-                            <div class="card">{{ activity }}</div>
-                        {% endfor %}
-                    
-                    {% else %}
-                        <p>No activities completed yet today!</p>
-
-                    {% endif %}
-                </div>
-            </div>
             
             
         </div>
